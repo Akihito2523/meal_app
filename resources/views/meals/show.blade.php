@@ -25,6 +25,8 @@
             <p>{{ $post->body }}</p>
 
             <div class="btn_flex">
+
+                {{-- (認可の制御)自分が投稿した記事の場合のみ、編集ボタンと削除ボタンを表示 --}}
                 @can('update', $post)
                     <a href="{{ route('meals.edit', $post) }}" class="btn">編集</a>
                 @endcan
@@ -36,6 +38,7 @@
                         <input type="submit" value="削除" id="btn" class="btn btn_red">
                     </form>
                 @endcan
+
             </div>
         </article>
     </div>

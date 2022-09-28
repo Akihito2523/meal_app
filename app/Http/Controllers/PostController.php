@@ -42,7 +42,6 @@ class PostController extends Controller {
         // ログインユーザーのIDを取得
         $post->user_id = $request->user()->id;
         // カテゴリーを取得
-        // dd($request->category);
         $post->category_id = $request->category;
         // 画像を取得
         $file = $request->file('image');
@@ -54,7 +53,7 @@ class PostController extends Controller {
             // 登録
             $post->save();
 
-            // 画像アップロード(Storage::putFileAs)
+            // 画像をアップロードする(Storage::putFileAs)
             // (保存先のパス, アップロードするファイル, アップロード後のファイル名)
             if (!Storage::putFileAs('images/posts', $file, $post->image)) {
                 // 例外を投げてロールバックさせる
@@ -108,17 +107,21 @@ class PostController extends Controller {
         $post = Post::find($id);
         // $fillableの内容を変数として読み込む
         $post->fill($request->all());
+        // カテゴリーを取得
+        $post->category_id = $request->category;
 
-        // (cannot)更新権限がなければ結果がtrue
+        // (cannot)更新権限を確認するメソッド
         if ($request->user()->cannot('update', $post)) {
-            return redirect()->route('posts.show', $post)
+            return redirect()
+                ->route('posts.show', $post)
                 ->withErrors('自分の記事以外は更新できません');
         }
 
         $file = $request->file('image');
         if ($file) {
-            $delete_file_path = 'images/posts/' . $post->image;
+            // 更新前の画像ファイルのファイル名を保持
             $delete_file_path = $post->image_path;
+            $post->image = self::createFileName($file);
         }
 
         // トランザクション開始
@@ -129,13 +132,13 @@ class PostController extends Controller {
             $post->save();
 
             if ($file) {
-                // 画像アップロード
+                // 画像をアップロードする
                 if (!Storage::putFileAs('images/posts', $file, $post->image)) {
                     // 例外を投げてロールバックさせる
                     throw new \Exception('画像ファイルの保存に失敗しました。');
                 }
 
-                // 画像削除
+                // 過去の画像ファイルを削除
                 if (!Storage::delete($delete_file_path)) {
                     //アップロードした画像を削除する
                     Storage::delete($post->image_path);
@@ -152,7 +155,8 @@ class PostController extends Controller {
             return back()->withInput()->withErrors($e->getMessage());
         }
 
-        return redirect()->route('meals.show', $post)
+        return redirect()
+            ->route('meals.show', $post)
             ->with('notice', '記事を更新しました');
     }
     /**

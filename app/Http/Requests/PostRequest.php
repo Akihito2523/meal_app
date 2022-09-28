@@ -30,9 +30,11 @@ class PostRequest extends FormRequest {
         $route = $this->route()->getName();
         if (
             // storeとupdateアクションがrouteと一致しているかを判定
+            // 登録時か更新時で且つ画像が指定された時だけ、imageを設定
             $route === 'meals.store' ||
             ($route === 'meals.update' && $this->file('image'))
         ) {
+            // ファイルの拡張子がjpgかpngに該当するか確認
             $rule['image'] = 'required|file|image|mimes:jpg,png';
         }
 
