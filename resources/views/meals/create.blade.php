@@ -11,20 +11,21 @@
 
         <div>
             <label for="title">タイトル</label>
-            <input type="text" id="title" name="title" placeholder="タイトル">
+            <input type="text" id="title" name="title" placeholder="タイトル" value="{{ old('title') }}">
         </div>
 
         <div>
             <label for="category">カテゴリー</label>
-            @foreach ($categories as $categorie)
-                <label><input type="radio" name="category" id='category'
-                        value="{{ $categorie->id }}">{{ $categorie->name }}</label>
+            @foreach ($categories as $category)
+                <label><input type="radio" name="category" id='category' value="{{ $category->id }}"
+                        {{ old('category') == $category->id ? 'checked' : '' }}>
+                    {{ $category->name }} </label>
             @endforeach
         </div>
 
         <div>
             <label for="body">詳細</label>
-            <textarea name="body" class="body" id="body"></textarea>
+            <textarea name="body" class="body" id="body">{{ old('body') }}</textarea>
         </div>
 
         <div>

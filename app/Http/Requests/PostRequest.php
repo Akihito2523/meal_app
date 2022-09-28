@@ -20,16 +20,18 @@ class PostRequest extends FormRequest {
      * @return array
      */
     public function rules() {
-        $route = $this->route()->getName();
-        return [
+        $rule = [
             'title' => 'required|string|max:50',
             'category' => 'required',
             'body' => 'required|string|max:2000',
         ];
 
+        // getNameはroute:listのNameを取得
+        $route = $this->route()->getName();
         if (
-            $route === 'posts.store' ||
-            ($route === 'posts.update' && $this->file('image'))
+            // storeとupdateアクションがrouteと一致しているかを判定
+            $route === 'meals.store' ||
+            ($route === 'meals.update' && $this->file('image'))
         ) {
             $rule['image'] = 'required|file|image|mimes:jpg,png';
         }
