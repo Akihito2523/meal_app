@@ -66,6 +66,11 @@ button {
     background: #bd1c1c;
 }
 
+.btn_blue {
+    background: #0c3890;
+
+}
+
 .btn:hover {
     text-decoration: underline;
 }

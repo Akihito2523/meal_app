@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Post extends Model
-{
+class Post extends Model {
     use HasFactory;
 
     protected $fillable = [
@@ -24,6 +23,14 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    // ひとつの投稿は、複数の「お気に入り」を獲得
+    public function nices() {
+        return $this->hasMany(Nice::class);
+    }
+
+
+
+    // リファクタリング
     public function getImageUrlAttribute() {
         return Storage::url($this->image_path);
     }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Nice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,8 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+        // Post::latest()メソッドでcreated_atの降順
+        // withメソッドを使用することで、関連するテーブルの情報を取得することが可能
         $posts = Post::with('user')->latest()->paginate(4);
         return view('meals.index', compact('posts'));
     }
@@ -78,10 +81,17 @@ class PostController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        $post = Post::find($id);
+    public function show(Post $post, $id) {
+        $postid = Post::find($id);
 
-        return view('meals.show', compact('post'));
+        if (Auth::check()) {
+            $nice = Nice::where('post_id' ,$post->id)
+                ->where('post_id', $post->id)
+                ->where('user_id', auth()->user()->id)->first();
+            return view('meals.show', compact('postid', 'post', 'nice'));
+        } else {
+            return view('meals.show', compact('postid', 'post'));
+        }
     }
 
     /**

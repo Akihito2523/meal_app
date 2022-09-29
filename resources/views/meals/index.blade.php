@@ -21,6 +21,9 @@
                             <p>{{ $post->body }}</p>
                         </a>
                     </div>
+                    <div>
+                        お気に入り数:{{ $post->nices->count() }}
+                    </div>
                 </div>
             @endforeach
 
@@ -28,6 +31,7 @@
 
     </div>
     <a href="{{ route('meals.create') }}" class="btn">新規作成</a>
+    {{-- ページネーションリンク --}}
     {{ $posts->links() }}
 
 </x-app-layout>
