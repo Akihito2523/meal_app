@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Http\Requests\PostRequest;
 use App\Models\Nice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-class PostController extends Controller {
+class PostController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         // Post::latest()メソッドでcreated_atの降順
         // withメソッドを使用することで、関連するテーブルの情報を取得することが可能
         $posts = Post::with('user')->latest()->paginate(4);
@@ -29,7 +31,8 @@ class PostController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $categories = Category::all();
         return view('meals.create', compact('categories'));
     }
@@ -37,14 +40,15 @@ class PostController extends Controller {
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\PostRequest  $request
+     * @param  \Illuminate\Http\PostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request) {
+    public function store(PostRequest $request)
+    {
         $post = new Post($request->all());
         // ログインユーザーのIDを取得
         $post->user_id = $request->user()->id;
-        // カテゴリーを取得
+        // カテゴリーIDを取得
         $post->category_id = $request->category;
         // 画像を取得
         $file = $request->file('image');
@@ -78,29 +82,35 @@ class PostController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post, $id) {
-        $postid = Post::find($id);
-
+    public function show($id)
+    {
+        $post = Post::find($id);
+        // ログインしているか確認
         if (Auth::check()) {
-            $nice = Nice::where('post_id' ,$post->id)
+            // postテーブルの情報を取得
+            $nice = Nice::with('post')
+                ->where('user_id', auth()->user()->id)
                 ->where('post_id', $post->id)
-                ->where('user_id', auth()->user()->id)->first();
-            return view('meals.show', compact('postid', 'post', 'nice'));
+                ->first(); //firstメソッドで、最初の１行を取得
+            //user_idとniceのidが紐付いていたらtrueで、お気に入り削除ボタンを表示
+            return view('meals.show', compact('post', 'nice'));
         } else {
-            return view('meals.show', compact('postid', 'post'));
+            //user_idとniceのidが紐付いてなければfalseで、お気に入り登録ボタンを表示
+            return view('meals.show', compact('post'));
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit(Post $post, $id)
+    {
         $post = Post::find($id);
         $categories = Category::all();
         return view('meals.edit', compact('post', 'categories'));
@@ -109,13 +119,14 @@ class PostController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\PostRequest  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, $id) {
-        $post = Post::find($id);
+    public function update(PostRequest $request, Post $post, $id)
+    {
         // $fillableの内容を変数として読み込む
+        $post = Post::find($id);
         $post->fill($request->all());
         // カテゴリーを取得
         $post->category_id = $request->category;
@@ -169,16 +180,17 @@ class PostController extends Controller {
             ->route('meals.show', $post)
             ->with('notice', '記事を更新しました');
     }
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        $post = Post::find($id);
-
+    public function destroy(Post $post, $id)
+    {
         // トランザクション開始
+        $post = Post::find($id);
         DB::beginTransaction();
         try {
             $post->delete();
@@ -202,7 +214,8 @@ class PostController extends Controller {
     }
 
     // (getClientOriginalName)画像ファイル名を取得
-    private static function createFileName($file) {
+    private static function createFileName($file)
+    {
         return date('YmdHis') . '_' . $file->getClientOriginalName();
     }
 }

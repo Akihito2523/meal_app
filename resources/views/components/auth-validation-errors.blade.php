@@ -1,3 +1,4 @@
+{{-- 変数を使用する場合は、@propsで取得可能 --}}
 @props(['errors'])
 
 @if ($errors->any())

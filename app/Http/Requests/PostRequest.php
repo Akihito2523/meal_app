@@ -4,13 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostRequest extends FormRequest {
+class PostRequest extends FormRequest
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -19,7 +21,8 @@ class PostRequest extends FormRequest {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         $rule = [
             'title' => 'required|string|max:50',
             'category' => 'required',
@@ -37,7 +40,6 @@ class PostRequest extends FormRequest {
             // ファイルの拡張子がjpgかpngに該当するか確認
             $rule['image'] = 'required|file|image|mimes:jpg,png';
         }
-
         return $rule;
     }
 }

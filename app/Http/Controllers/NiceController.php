@@ -7,13 +7,15 @@ use App\Models\Nice;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
-class NiceController extends Controller {
+class NiceController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         //
     }
 
@@ -22,7 +24,8 @@ class NiceController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -32,17 +35,18 @@ class NiceController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $postid) {
-        $request->session()->regenerateToken();
+    public function store($post)
+    {
         $nice = new Nice();
-
+        // ユーザーidをナイスuser_idに置き換える
         $nice->user_id = Auth::user()->id;
-        $nice->post_id = $postid;
-
+        // ポストidをナイスpost_idに置き換える
+        $nice->post_id = $post;
+        // niceのidとuser_idを紐付ける
         $nice->save();
-
+        // $紐付けた情報を渡す
         return redirect()
-            ->route('meals.show', $postid)
+            ->route('meals.show', $post)
             ->with('notice', 'ナイスを登録しました。');
     }
 
@@ -52,7 +56,8 @@ class NiceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -62,7 +67,8 @@ class NiceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -73,7 +79,8 @@ class NiceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -83,10 +90,12 @@ class NiceController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post, Nice $nice) {
-
+    public function destroy($post, Nice $nice)
+    {
+        // niceを削除し紐付いているuser_idも削除
+        $nice->delete();
         return redirect()
             ->route('meals.show', $post)
-            ->with('notice', 'お気に入りを削除しました');
+            ->with('notice', 'ナイスを削除しました');
     }
 }

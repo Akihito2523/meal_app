@@ -12,6 +12,7 @@
                     <div class="main_box">
                         <a href="{{ route('meals.show', $post) }}">
                             <h2>{{ $post->title }}</h2>
+                            <p>登録者：{{ $post->user->name }}</p>
                             <p>ALEXANDER</p>
                             <p>カテゴリー：{{ $post->category->name }}</p>
                             <p class="current_time">現在時刻：{{ date('Y-d H:i:s') }}</p>
@@ -28,10 +29,10 @@
             @endforeach
 
         </div>
+        {{-- ページネーションリンク --}}
+        {{ $posts->links() }}
 
     </div>
     <a href="{{ route('meals.create') }}" class="btn">新規作成</a>
-    {{-- ページネーションリンク --}}
-    {{ $posts->links() }}
 
 </x-app-layout>

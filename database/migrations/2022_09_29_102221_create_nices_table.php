@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNicesTable extends Migration {
+class CreateNicesTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -30,7 +31,8 @@ class CreateNicesTable extends Migration {
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('nices');
     }
 }

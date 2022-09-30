@@ -37,8 +37,9 @@ Route::resource('meals', PostController::class)
     ->only(['index', 'show']);
 
 // お気に入りルーティング
-Route::resource('meals.nice', NiceController::class)
+Route::resource('meals.nices', NiceController::class)
     ->only(['store', 'destroy'])
     ->middleware('auth');
 
 require __DIR__ . '/auth.php';
+

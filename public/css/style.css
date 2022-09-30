@@ -67,12 +67,25 @@ button {
 }
 
 .btn_blue {
-    background: #0c3890;
+    background: #286bc9;
+}
 
+.btn_pink {
+    background: #c31ad0;
 }
 
 .btn:hover {
     text-decoration: underline;
+}
+
+.inline {
+    display: inline;
+}
+
+.nice_phpto {
+    width: 30px;
+    display: inline;
+    margin-top: 10px;
 }
 
 /* 現在時間 */
