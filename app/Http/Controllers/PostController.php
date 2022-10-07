@@ -92,6 +92,7 @@ class PostController extends Controller
         if (Auth::check()) {
             // postテーブルの情報を取得
             $nice = Nice::with('post')
+            // whereの1つ目と2つ目が等しければ取得
                 ->where('user_id', auth()->user()->id)
                 ->where('post_id', $post->id)
                 ->first(); //firstメソッドで、最初の１行を取得
@@ -189,8 +190,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post, $id)
     {
-        // トランザクション開始
         $post = Post::find($id);
+        // トランザクション開始
         DB::beginTransaction();
         try {
             $post->delete();

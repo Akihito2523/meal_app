@@ -40,11 +40,13 @@ class NiceController extends Controller
         $nice = new Nice();
         // ユーザーidをナイスuser_idに置き換える
         $nice->user_id = Auth::user()->id;
+        // $nice->user_id = Auth::id;
+        // $nice->user_id = $request->user()->id;
         // ポストidをナイスpost_idに置き換える
         $nice->post_id = $post;
         // niceのidとuser_idを紐付ける
         $nice->save();
-        // $紐付けた情報を渡す
+        // 紐付けた情報を渡す
         return redirect()
             ->route('meals.show', $post)
             ->with('notice', 'ナイスを登録しました。');

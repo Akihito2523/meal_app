@@ -13,7 +13,6 @@
                         <a href="{{ route('meals.show', $post) }}">
                             <h2>{{ $post->title }}</h2>
                             <p>登録者：{{ $post->user->name }}</p>
-                            <p>ALEXANDER</p>
                             <p>カテゴリー：{{ $post->category->name }}</p>
                             <p class="current_time">現在時刻：{{ date('Y-d H:i:s') }}</p>
                             <p>記事作成日:{{ date('Y-d H:i:s', strtotime('-1 day')) < $post->created_at ?: '' }}{{ $post->created_at }}

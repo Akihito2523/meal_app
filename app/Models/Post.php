@@ -13,6 +13,7 @@ class Post extends Model
     protected $fillable = [
         'title',
         'body',
+        // 'category_id'
     ];
 
     // (belongsTo)1件の記事は1人のユーザーに紐付いている

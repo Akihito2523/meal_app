@@ -5,15 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CategorySeeder extends Seeder
-{
+class CategorySeeder extends Seeder {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
+        // カテゴリーテーブルが入っていなければ
         if (!DB::table('categories')->first()) {
             DB::table('categories')->insert([
                 ['name' => '野菜'],

@@ -16,8 +16,6 @@
 
             <p>カテゴリー：{{ $post->category->name }}</p>
 
-            <p>ALEXANDER</p>
-
             <p class="current_time">現在時刻：{{ date('Y-d H:i:s') }}</p>
 
             <p>記事作成日:{{ date('Y-d H:i:s', strtotime('-1 day')) < $post->created_at ?: '' }}{{ $post->created_at }}
@@ -48,7 +46,6 @@
             @endauth
 
             <div class="btn_flex">
-
 
                 {{-- (認可の制御)自分が投稿した記事の場合のみ、編集ボタンと削除ボタンを表示 --}}
                 @can('update', $post)

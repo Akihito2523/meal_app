@@ -19,7 +19,7 @@
             <label for="category">カテゴリー</label>
             @foreach ($categories as $category)
                 <label><input type="radio" name="category" id='category' value="{{ $category->id }}"
-                        {{ old('category') == $category->id ? 'checked' : '' }}>
+                        {{ old('category', $post->category_id) == $category->id ? 'checked' : '' }}>
                     {{ $category->name }} </label>
             @endforeach
         </div>
