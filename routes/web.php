@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\NiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +36,10 @@ Route::resource('meals', PostController::class)
 Route::resource('meals', PostController::class)
     ->only(['index', 'show']);
 
+// お気に入りルーティング
+Route::resource('meals.nices', NiceController::class)
+    ->only(['store', 'destroy'])
+    ->middleware('auth');
+
 require __DIR__ . '/auth.php';
+

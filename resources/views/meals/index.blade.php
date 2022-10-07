@@ -12,7 +12,7 @@
                     <div class="main_box">
                         <a href="{{ route('meals.show', $post) }}">
                             <h2>{{ $post->title }}</h2>
-                            <p>ALEXANDER</p>
+                            <p>登録者：{{ $post->user->name }}</p>
                             <p>カテゴリー：{{ $post->category->name }}</p>
                             <p class="current_time">現在時刻：{{ date('Y-d H:i:s') }}</p>
                             <p>記事作成日:{{ date('Y-d H:i:s', strtotime('-1 day')) < $post->created_at ?: '' }}{{ $post->created_at }}
@@ -21,13 +21,17 @@
                             <p>{{ $post->body }}</p>
                         </a>
                     </div>
+                    <div>
+                        お気に入り数:{{ $post->nices->count() }}
+                    </div>
                 </div>
             @endforeach
 
         </div>
+        {{-- ページネーションリンク --}}
+        {{ $posts->links() }}
 
     </div>
     <a href="{{ route('meals.create') }}" class="btn">新規作成</a>
-    {{ $posts->links() }}
 
 </x-app-layout>

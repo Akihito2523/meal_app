@@ -12,6 +12,7 @@ class CategorySeeder extends Seeder {
      * @return void
      */
     public function run() {
+        // カテゴリーテーブルが入っていなければ
         if (!DB::table('categories')->first()) {
             DB::table('categories')->insert([
                 ['name' => '野菜'],
